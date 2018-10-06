@@ -27,9 +27,18 @@ endfunction
 function! thinpl#util#pack_link_location(plugin) abort
   let name = a:plugin.name
   let packname = get(g:, 'thinpl#packname', 'thinpl')
-  return thinpl#util#vim_home_dir() . '/pack/' . packname . '/opt/' . name
+  return thinpl#util#vim_pack_opt_dir() . '/' . name
 endfunction
 
 function! thinpl#util#vim_home_dir() abort
   return '~/.vim'
+endfunction
+
+function! thinpl#util#vim_pack_opt_dir() abort
+  let packname = get(g:, 'thinpl#packname', 'thinpl')
+  return thinpl#util#vim_home_dir() . '/pack/' . packname . '/opt'
+endfunction
+
+function! thinpl#util#vim_pack_start_dir() abort
+  return thinpl#util#vim_home_dir() . '/pack/' . packname . '/start'
 endfunction
