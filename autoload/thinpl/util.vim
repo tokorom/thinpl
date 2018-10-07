@@ -42,3 +42,8 @@ endfunction
 function! thinpl#util#vim_pack_start_dir() abort
   return thinpl#util#vim_home_dir() . '/pack/' . packname . '/start'
 endfunction
+
+function! thinpl#util#execute(...) abort
+  let command = join(a:000, ' ')
+  execute command
+endfunction

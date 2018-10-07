@@ -46,15 +46,15 @@ function! thinpl#setup_plugins(...) abort
     else
       for filetype in filetypes
         let command = 'call thinpl#load_plugin("' . plugin.name . '")'
-        execute 'augroup ' . plugin.augroup_name
-        execute '  autocmd FileType ' . filetype . ' ' . command
-        execute 'augroup END'
+        call thinpl#util#execute('augroup', plugin.augroup_name)
+        call thinpl#util#execute('autocmd', 'FileType', filetype, command)
+        call thinpl#util#execute('augroup', 'END')
       endfor
       for autocmd in autocmds
         let command = 'call thinpl#load_plugin("' . plugin.name . '")'
-        execute 'augroup ' . plugin.augroup_name
-        execute '  autocmd ' . autocmd . ' * ' . command
-        execute 'augroup END'
+        call thinpl#util#execute('augroup', plugin.augroup_name)
+        call thinpl#util#execute('autocmd', autocmd, '*', command)
+        call thinpl#util#execute('augroup', 'END')
       endfor
     endif
   endfor
