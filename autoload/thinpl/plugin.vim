@@ -3,6 +3,8 @@
 function! thinpl#plugin#setup(plugin) abort
   let plugin = a:plugin
 
+  let plugin.is_loaded = 0
+
   function! plugin.is_installed() abort
     return isdirectory(expand(self.pack_link_location))
   endfunction
@@ -15,10 +17,17 @@ function! thinpl#plugin#setup(plugin) abort
     return 1
   endfunction
 
-  function! plugin.load() abort
+  function! plugin.confirm_install() abort
     if !self.is_installed()
       let command = 'autocmd VimEnter * call thinpl#confirm_install("' . self.raw_name .'")'
       execute command
+      return
+    endif
+
+  endfunction
+
+  function! plugin.load() abort
+    if self.is_loaded
       return
     endif
 
@@ -31,5 +40,7 @@ function! thinpl#plugin#setup(plugin) abort
     if has_key(self, 'did_load')
       call self.did_load()
     endif
+
+    let self.is_loaded = 1
   endfunction
 endfunction

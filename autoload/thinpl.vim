@@ -12,7 +12,8 @@ function! thinpl#add(name) abort
   let plugin.repository = repository " plugin repository
   let plugin.local_location = thinpl#util#local_location(plugin) " plugin local locaiton
   let plugin.pack_link_location = thinpl#util#pack_link_location(plugin) " plugin pack link location
-  let plugin.filetype = [] " supported filetypes
+  let plugin.filetype = [] " This plugin loads when becomes a specific filetype
+  let plugin.autocmd = [] " This plugin loads a specific autocmd as a trigger
 
   " let plugin.will_load = function('foo')
   " let plugin.did_load = function('foo')
@@ -27,16 +28,28 @@ function! thinpl#setup_plugins(...) abort
   let plugins = get(a:, 1, g:thinpl#plugins)
 
   for plugin in plugins
+    call plugin.confirm_install()
+
     let filetypes = get(plugin, 'filetype', [])
     if type(filetypes) == type('')
       let filetypes = [filetypes]
     endif
-    if empty(filetypes)
+
+    let autocmds = get(plugin, 'autocmd', [])
+    if type(autocmds) == type('')
+      let autocmds = [autocmds]
+    endif
+
+    if empty(filetypes) && empty(autocmds)
       call plugin.load()
     else
       for filetype in filetypes
         let command = 'call thinpl#load_plugin("' . plugin.name . '")'
         execute 'autocmd FileType ' . filetype . ' ' . command
+      endfor
+      for autocmd in autocmds
+        let command = 'call thinpl#load_plugin("' . plugin.name . '")'
+        execute 'autocmd ' . autocmd . ' * ' . command
       endfor
     endif
   endfor
