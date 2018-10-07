@@ -36,6 +36,7 @@ call thinpl#setup_plugins()
 ```vim
 " use a local plugin
 let plugin = thinpl#add('swift_vim')
+let plugin.repository = ''
 let plugin.local_location = '~/repos/apple/swift/utils/vim'
 
 " this plugin loads when becomes specific filetypes
