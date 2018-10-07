@@ -17,9 +17,8 @@ function! thinpl#plugin#setup(plugin) abort
 
   function! plugin.load() abort
     if !self.is_installed()
-      echomsg self.name ' is not enabled.' . ' ' .
-      \ 'If you want to install it here please use ' .
-      \ ':call thinpl#install("' . self.raw_name . '")'
+      let command = 'autocmd VimEnter * call thinpl#confirm_install("' . self.raw_name .'")'
+      execute command
       return
     endif
 

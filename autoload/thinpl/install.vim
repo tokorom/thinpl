@@ -44,13 +44,20 @@ endfunction
 function! thinpl#install#link(plugin) abort
   let plugin = a:plugin
 
-
   let opt_dir = expand(thinpl#util#vim_pack_opt_dir())
   if !isdirectory(opt_dir)
     mkdir(opt_dir)
   endif
 
-  let command = ['command', 'ln', '-s', expand(plugin.local_location), expand(plugin.pack_link_location)]
+  let local_location = expand(plugin.local_location)
+  if !isdirectory(local_location)
+    echoerr local_location . ' is not found.'
+    return
+  endif
+
+  let pack_link_location = expand(plugin.pack_link_location)
+
+  let command = ['command', 'ln', '-s', plugin.local_location, plugin.pack_link_location]
 
   echom join(command, ' ')
 

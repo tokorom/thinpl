@@ -47,3 +47,15 @@ function! thinpl#install(name) abort
   let plugin = thinpl#add(a:name)
   call thinpl#install#run(plugin)
 endfunction
+
+" confirm whether to install
+function! thinpl#confirm_install(name) abort
+  let name = a:name
+
+  let response = input(name . ' is not enabled. ' .
+  \ 'Would you like to install this plugin now? [y/n] ')
+
+  if (response == 'y') || (response == 'Y')
+    call thinpl#install(name)
+  endif
+endfunction
