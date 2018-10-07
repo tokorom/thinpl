@@ -14,6 +14,7 @@ function! thinpl#add(name) abort
   let plugin.pack_link_location = thinpl#util#pack_link_location(plugin) " plugin pack link location
   let plugin.filetype = [] " This plugin loads when becomes a specific filetype
   let plugin.autocmd = [] " This plugin loads a specific autocmd as a trigger
+  let plugin.augroup_name = 'thinpl_' . name
 
   " let plugin.will_load = function('foo')
   " let plugin.did_load = function('foo')
@@ -45,11 +46,15 @@ function! thinpl#setup_plugins(...) abort
     else
       for filetype in filetypes
         let command = 'call thinpl#load_plugin("' . plugin.name . '")'
-        execute 'autocmd FileType ' . filetype . ' ' . command
+        execute 'augroup ' . plugin.augroup_name
+        execute '  autocmd FileType ' . filetype . ' ' . command
+        execute 'augroup END'
       endfor
       for autocmd in autocmds
         let command = 'call thinpl#load_plugin("' . plugin.name . '")'
-        execute 'autocmd ' . autocmd . ' * ' . command
+        execute 'augroup ' . plugin.augroup_name
+        execute '  autocmd ' . autocmd . ' * ' . command
+        execute 'augroup END'
       endfor
     endif
   endfor

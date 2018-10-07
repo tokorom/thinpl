@@ -42,5 +42,19 @@ function! thinpl#plugin#setup(plugin) abort
     endif
 
     let self.is_loaded = 1
+
+    if self.has_augroup()
+      call self.remove_plugin_augroup()
+    endif
+  endfunction
+
+  function! plugin.has_augroup() abort
+    return !empty(self.filetype) || !empty(self.autocmd)
+  endfunction
+
+  function! plugin.remove_plugin_augroup() abort
+    execute 'augroup ' . self.augroup_name
+    execute '  au!'
+    execute 'augroup END'
   endfunction
 endfunction
