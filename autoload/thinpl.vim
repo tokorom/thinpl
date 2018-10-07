@@ -90,3 +90,15 @@ function! thinpl#confirm_install(name) abort
     call thinpl#install(name)
   endif
 endfunction
+
+" print loaded plugins
+function! thinpl#print_loaded_plugins() abort
+  let loaded_names = []
+  for plugin in g:thinpl#plugins
+    if plugin.is_loaded
+      call add(loaded_names, plugin.name)
+    endif
+  endfor
+
+  echo join(loaded_names, "\n")
+endfunction
