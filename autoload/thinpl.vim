@@ -12,8 +12,10 @@ function! thinpl#add(name) abort
   let plugin.repository = repository " plugin repository
   let plugin.local_location = thinpl#util#local_location(plugin) " plugin local locaiton
   let plugin.pack_link_location = thinpl#util#pack_link_location(plugin) " plugin pack link location
-  let plugin.filetype = [] " This plugin loads when becomes a specific filetype
-  let plugin.autocmd = [] " This plugin loads a specific autocmd as a trigger
+  let plugin.filetype = [] " This plugin loads when becomes specific filetypes
+  let plugin.autocmd = [] " This plugin loads specific autocmds as a trigger
+  let plugin.command = [] " This plugin loads specific commands as a trigger
+  let plugin.function = [] " This plugin loads specific functions as a trigger
   let plugin.augroup_name = 'thinpl_' . name
 
   " let plugin.will_load = function('foo')
@@ -41,19 +43,41 @@ function! thinpl#setup_plugins(...) abort
       let autocmds = [autocmds]
     endif
 
-    if empty(filetypes) && empty(autocmds)
+    let commands = get(plugin, 'command', [])
+    if type(commands) == type('')
+      let commands = [commands]
+    endif
+
+    let functions = get(plugin, 'function', [])
+    if type(functions) == type('')
+      let functions = [functions]
+    endif
+
+    if empty(filetypes) && empty(autocmds) && empty(commands) && empty(functions)
       call plugin.load()
     else
       for filetype in filetypes
-        let command = 'call thinpl#load_plugin("' . plugin.name . '")'
+        let load_plugin = 'call thinpl#load_plugin("' . plugin.name . '")'
         call thinpl#util#execute('augroup', plugin.augroup_name)
-        call thinpl#util#execute('autocmd', 'FileType', filetype, command)
+        call thinpl#util#execute('autocmd', 'FileType', filetype, load_plugin)
         call thinpl#util#execute('augroup', 'END')
       endfor
       for autocmd in autocmds
-        let command = 'call thinpl#load_plugin("' . plugin.name . '")'
+        let load_plugin = 'call thinpl#load_plugin("' . plugin.name . '")'
         call thinpl#util#execute('augroup', plugin.augroup_name)
-        call thinpl#util#execute('autocmd', autocmd, '*', command)
+        call thinpl#util#execute('autocmd', autocmd, '*', load_plugin)
+        call thinpl#util#execute('augroup', 'END')
+      endfor
+      for command in commands
+        let load_plugin = 'call thinpl#load_plugin("' . plugin.name . '")'
+        call thinpl#util#execute('augroup', plugin.augroup_name)
+        call thinpl#util#execute('autocmd', 'CmdUndefined', command, load_plugin)
+        call thinpl#util#execute('augroup', 'END')
+      endfor
+      for fmatch in functions
+        let load_plugin = 'call thinpl#load_plugin("' . plugin.name . '")'
+        call thinpl#util#execute('augroup', plugin.augroup_name)
+        call thinpl#util#execute('autocmd', 'FuncUndefined', fmatch, load_plugin)
         call thinpl#util#execute('augroup', 'END')
       endfor
     endif

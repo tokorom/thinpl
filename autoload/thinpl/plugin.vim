@@ -20,7 +20,7 @@ function! thinpl#plugin#setup(plugin) abort
   function! plugin.confirm_install() abort
     if !self.is_installed()
       let command = 'call thinpl#confirm_install("' . self.raw_name .'")'
-      call thinpl#util#execute('augroup', g:thinpl#augroup_name)
+      call thinpl#util#execute('augroup', 'thinpl')
       call thinpl#util#execute('autocmd', 'VimEnter', '*', command)
       call thinpl#util#execute('augroup', 'END')
       return
@@ -39,19 +39,22 @@ function! thinpl#plugin#setup(plugin) abort
 
     call thinpl#util#execute('packadd', self.name)
 
-    if has_key(self, 'did_load')
-      call self.did_load()
-    endif
-
     let self.is_loaded = 1
 
     if self.has_augroup()
       call self.remove_plugin_augroup()
     endif
+
+    if has_key(self, 'did_load')
+      call self.did_load()
+    endif
   endfunction
 
   function! plugin.has_augroup() abort
-    return !empty(self.filetype) || !empty(self.autocmd)
+    return !empty(self.filetype) ||
+    \ !empty(self.autocmd) ||
+    \ !empty(self.command) || 
+    \ !empty(self.function)
   endfunction
 
   function! plugin.remove_plugin_augroup() abort
