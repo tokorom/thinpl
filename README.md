@@ -34,16 +34,16 @@ call thinpl#setup_plugins()
 - `~/.vim/plugins.vim`
 
 ```vim
-" use a local plugin
+" Use a local plugin
 let plugin = thinpl#add('swift_vim')
 let plugin.repository = ''
 let plugin.local_location = '~/repos/apple/swift/utils/vim'
 
-" this plugin loads when becomes specific filetypes
+" This plugin loads when becomes specific filetypes
 let plugin = thinpl#add('swift-dict.vim')
 let plugin.filetype = ['swift']
 
-" this plugin loads specific autocmds as a trigger
+" This plugin loads specific autocmds as a trigger
 let plugin = thinpl#add('kana/vim-smartinput')
 let plugin.autocmd = ["InsertEnter"]
 
