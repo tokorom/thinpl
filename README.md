@@ -1,4 +1,4 @@
-# thinpl plugin manager for Vim8
+# thinpl plugin manager for Vim 8
 
 thinpl is a simple and thin plugin manager for Vim 8
 
@@ -8,6 +8,15 @@ thinpl is a simple and thin plugin manager for Vim 8
     - +packages
     - +job
 
+## Installation
+
+```sh
+mkdir -p ~/.vim/pack/thinpl/start
+git clone https://github.com/tokorom/thinpl ~/.vim/pack/thinpl/start/thimpl
+vim ~/.vim/plugins.vim
+# and edit plugins.vim
+```
+
 ## Simple usage
 
 - `~/.vim/plugins.vim`
@@ -16,6 +25,15 @@ thinpl is a simple and thin plugin manager for Vim 8
 " add a plugin to ~/.vim/pack/thimpl/opt and packadd
 call thinpl#add('w0ng/vim-hybrid')
 
+" call this at the end!
+call thinpl#setup_plugins()
+```
+
+## Many options
+
+- `~/.vim/plugins.vim`
+
+```vim
 " use a local plugin
 let plugin = thinpl#add('swift_vim')
 let plugin.local_location = '~/repos/apple/swift/utils/vim'
@@ -57,7 +75,11 @@ function! plugin.did_load() abort
 endfunction
 ```
 
-## Some options
+### Sample plugins.vim
+
+- [tokorom's plugins.vim](https://github.com/tokorom/dotfiles/blob/master/.vim/plugins.vim)
+
+## Override plugin options
 
 ### Change plugins.vim
 
@@ -79,15 +101,6 @@ let g:thinpl#git_clone_location = '~/thinpl/repos'
 " this is default value
 let g:thinpl#packname = 'thinpl'
 " ~/.vim/pack/thinpl/opt
-```
-
-## Installation
-
-```sh
-mkdir -p ~/.vim/pack/thinpl/start
-git clone https://github.com/tokorom/thinpl ~/.vim/pack/thinpl/start/thimpl
-vim ~/.vim/plugins.vim
-# and edit plugins.vim
 ```
 
 ## Limitations
