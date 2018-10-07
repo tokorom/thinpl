@@ -18,6 +18,7 @@ function! thinpl#add(name) abort
   let plugin.function = [] " This plugin loads specific functions as a trigger
   let plugin.augroup_name = 'thinpl_' . name
 
+  " let plugin.prepare = function('foo')
   " let plugin.will_load = function('foo')
   " let plugin.did_load = function('foo')
 
@@ -31,6 +32,10 @@ function! thinpl#setup_plugins(...) abort
   let plugins = get(a:, 1, g:thinpl#plugins)
 
   for plugin in plugins
+    if has_key(plugin, 'prepare')
+      call plugin.prepare()
+    endif
+
     call plugin.confirm_install()
 
     let filetypes = get(plugin, 'filetype', [])
@@ -85,8 +90,9 @@ function! thinpl#setup_plugins(...) abort
 endfunction
 
 " load a plugin
-function! thinpl#load_plugin(name) abort
+function! thinpl#load_plugin(name, ...) abort
   let name = a:name
+  let success_message = get(a:, 1, '')
 
   if !has_key(g:thinpl#plugins_by_name, name)
     echoerr name . ' is not found.'
@@ -94,7 +100,7 @@ function! thinpl#load_plugin(name) abort
   endif
 
   let plugin = g:thinpl#plugins_by_name[name]
-  call plugin.load()
+  call plugin.load(success_message)
 endfunction
 
 " install a plugin

@@ -28,10 +28,12 @@ function! thinpl#plugin#setup(plugin) abort
 
   endfunction
 
-  function! plugin.load() abort
+  function! plugin.load(...) abort
     if self.is_loaded
       return
     endif
+
+    let success_message = get(a:, 1, '')
 
     if has_key(self, 'will_load')
       call self.will_load()
@@ -47,6 +49,10 @@ function! thinpl#plugin#setup(plugin) abort
 
     if has_key(self, 'did_load')
       call self.did_load()
+    endif
+
+    if !empty(success_message)
+      echomsg success_message
     endif
   endfunction
 
