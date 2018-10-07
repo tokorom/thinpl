@@ -42,9 +42,27 @@ function! thinpl#setup_plugins(...) abort
   endfor
 endfunction
 
-" install plugin
+" load a plugin
+function! thinpl#load_plugin(name) abort
+  let name = a:name
+
+  if !has_key(g:thinpl#plugins_by_name, name)
+    echoerr name . ' is not found.'
+    return
+  endif
+
+  let plugin = g:thinpl#plugins_by_name[name]
+  call plugin.load()
+endfunction
+
+" install a plugin
 function! thinpl#install(name) abort
-  let plugin = thinpl#add(a:name)
+  let name = a:name
+  if has_key(g:thinpl#plugins_by_name, name)
+    let plugin = g:thinpl#plugins_by_name[name]
+  else
+    let plugin = thinpl#add(name)
+  endif
   call thinpl#install#run(plugin)
 endfunction
 
