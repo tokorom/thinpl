@@ -12,7 +12,7 @@ thinpl is a simple and thin plugin manager for Vim 8
 
 ```sh
 mkdir -p ~/.vim/pack/thinpl/start
-git clone https://github.com/tokorom/thinpl ~/.vim/pack/thinpl/start/thimpl
+git clone https://github.com/tokorom/thinpl ~/.vim/pack/thinpl/start/thinpl
 vim ~/.vim/plugins.vim
 # and edit plugins.vim
 ```
@@ -22,7 +22,7 @@ vim ~/.vim/plugins.vim
 - `~/.vim/plugins.vim`
 
 ```vim
-" add a plugin to ~/.vim/pack/thimpl/opt and packadd
+" add a plugin to ~/.vim/pack/thinpl/opt and packadd
 " 常に使うpluginならaddするだけ
 call thinpl#add('w0ng/vim-hybrid')
 
