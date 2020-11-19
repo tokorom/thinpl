@@ -57,7 +57,7 @@ function! thinpl#install#link(plugin) abort
 
   let pack_link_location = expand(plugin.pack_link_location)
 
-  let command = ['command', 'ln', '-s', local_location, pack_link_location]
+  let command = ['command', 'ln', '-s', '-f', local_location, pack_link_location]
 
   echom join(command, ' ')
 
