@@ -7,7 +7,7 @@ function! thinpl#install#run(plugin) abort
   if !empty(plugin.repository) && !plugin.has_local_repository()
     let repos_location = expand(g:thinpl#git_clone_location)
     if !isdirectory(repos_location)
-      mkdir(repos_location)
+      call mkdir(repos_location)
     endif
 
     call thinpl#install#clone_and_link(plugin)
@@ -46,7 +46,7 @@ function! thinpl#install#link(plugin) abort
 
   let opt_dir = expand(thinpl#util#vim_pack_opt_dir())
   if !isdirectory(opt_dir)
-    mkdir(opt_dir)
+    call mkdir(opt_dir)
   endif
 
   let local_location = expand(plugin.local_location)
